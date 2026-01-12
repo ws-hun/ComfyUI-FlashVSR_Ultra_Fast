@@ -15,9 +15,13 @@ try:
 except ModuleNotFoundError:
     FLASH_ATTN_3_AVAILABLE = False
 
+# 修改flash_attn的导入检查
 try:
     import flash_attn
-    FLASH_ATTN_2_AVAILABLE = True
+    # 增加函数存在性和可调用性检查
+    FLASH_ATTN_2_AVAILABLE = hasattr(flash_attn, 'flash_attn_func') and callable(flash_attn.flash_attn_func)
+    if not FLASH_ATTN_2_AVAILABLE:
+        print("警告: flash_attn模块已导入，但flash_attn_func不可用，将使用PyTorch内置注意力机制")
 except ModuleNotFoundError:
     FLASH_ATTN_2_AVAILABLE = False
 
